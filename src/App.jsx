@@ -54,17 +54,9 @@ export class App extends Component {
         number,
       };
 
-      this.setState(
-        prevState => ({
-          contacts: [...prevState.contacts, newContact],
-        }),
-        () => {
-          localStorage.setItem(
-            CONTACTS_LOCAL_STORAGE_KEY,
-            JSON.stringify(this.state.contacts)
-          );
-        }
-      );
+      this.setState(prevState => ({
+        contacts: [...prevState.contacts, newContact],
+      }));
 
       Notiflix.Notify.success('Contact added successfully');
     } else {
@@ -88,11 +80,6 @@ export class App extends Component {
       this.setState(state => ({
         contacts: state.contacts.filter(contact => contact.id !== id),
       }));
-
-      localStorage.setItem(
-        CONTACTS_LOCAL_STORAGE_KEY,
-        JSON.stringify(this.state.contacts)
-      );
 
       Notiflix.Notify.success(`${removedContact.name} has been removed`);
     }
