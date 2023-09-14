@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Contact } from '../index';
 
-export function ContactList({ contacts, handleDelete }) {
+export const ContactList = ({ contacts, handleDelete }) => {
   return (
     <ul>
       {contacts.map(({ id, name, number }) => (
@@ -15,7 +15,7 @@ export function ContactList({ contacts, handleDelete }) {
       ))}
     </ul>
   );
-}
+};
 
 ContactList.propTypes = {
   contacts: PropTypes.arrayOf(

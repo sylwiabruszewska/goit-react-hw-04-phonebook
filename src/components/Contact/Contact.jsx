@@ -5,7 +5,7 @@ import { faUser, faPhone } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '../index';
 
-export function Contact({ id, name, number, handleDelete }) {
+export const Contact = ({ id, name, number, handleDelete }) => {
   return (
     <StyledItem>
       <StyledBox>
@@ -26,7 +26,7 @@ export function Contact({ id, name, number, handleDelete }) {
       </Button>
     </StyledItem>
   );
-}
+};
 
 Contact.propTypes = {
   name: PropTypes.string.isRequired,

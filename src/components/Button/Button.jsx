@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { StyledButton } from './Button.styled';
 
-export function Button(props) {
+export const Button = props => {
   const {
     type = 'button',
     handler = null,
@@ -15,7 +15,7 @@ export function Button(props) {
       {text}
     </StyledButton>
   );
-}
+};
 
 Button.propTypes = {
   children: PropTypes.string.isRequired,
