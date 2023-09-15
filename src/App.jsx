@@ -35,6 +35,7 @@ export const App = () => {
     }
   }, [contacts]);
 
+  // dodawanie nowego kontaktu
   const addNewContact = ({ name, number }) => {
     const existingContact = checkIfContactExists(name);
 
@@ -53,9 +54,11 @@ export const App = () => {
     }
   };
 
+  // sprawdzanie czy dany kontakt istnieje
   const checkIfContactExists = name =>
     contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase());
 
+  //usuwanie kontaktu z listy kontaktów
   const removeContact = id => {
     const removedContact = contacts.find(contact => contact.id === id);
 
@@ -66,6 +69,7 @@ export const App = () => {
     }
   };
 
+  // zarządzanie filtrem
   const handleFilterChange = event => {
     setFilter(event.target.value);
   };
