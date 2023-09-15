@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import {
   Container,
@@ -13,39 +13,30 @@ import Notiflix from 'notiflix';
 
 const CONTACTS_LOCAL_STORAGE_KEY = 'contacts';
 
-export class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
+export const App = () => {
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState('');
 
-  // aktualizacja danych w state na podstawie danych w local storage
-  componentDidMount() {
+  // mounting phase - aktualizacja danych w state na podstawie danych w local storage
+  useEffect(() => {
     const storedContacts = localStorage.getItem(CONTACTS_LOCAL_STORAGE_KEY);
     if (storedContacts && storedContacts !== 0) {
-      this.setState({ contacts: JSON.parse(storedContacts) });
+      setContacts(JSON.parse(storedContacts));
     }
-  }
+  }, []);
 
-  // aktualizacja danych w local storage przy update komponentu
-  componentDidUpdate(_, prevState) {
-    const { contacts } = this.state;
-    if (contacts !== prevState.contacts) {
-      this.updateLocalStorage(contacts);
-    }
+  // updating phase - aktualizacja danych w local storage przy update komponentu
+  useEffect(() => {
+    const serializedContacts = JSON.stringify(contacts);
+    localStorage.setItem(CONTACTS_LOCAL_STORAGE_KEY, serializedContacts);
 
     if (contacts.length === 0) {
       localStorage.removeItem(CONTACTS_LOCAL_STORAGE_KEY);
     }
-  }
+  }, [contacts]);
 
-  updateLocalStorage = contacts => {
-    const serializedContacts = JSON.stringify(contacts);
-    localStorage.setItem(CONTACTS_LOCAL_STORAGE_KEY, serializedContacts);
-  };
-
-  addNewContact = ({ name, number }) => {
-    const existingContact = this.checkIfContactExists(name);
+  const addNewContact = ({ name, number }) => {
+    const existingContact = checkIfContactExists(name);
 
     if (!existingContact) {
       const newContact = {
@@ -54,9 +45,7 @@ export class App extends Component {
         number,
       };
 
-      this.setState(prevState => ({
-        contacts: [...prevState.contacts, newContact],
-      }));
+      setContacts([...contacts, newContact]);
 
       Notiflix.Notify.success('Contact added successfully');
     } else {
@@ -64,51 +53,36 @@ export class App extends Component {
     }
   };
 
-  checkIfContactExists(name) {
-    const { contacts } = this.state;
-    return contacts.find(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
-    );
-  }
+  const checkIfContactExists = name =>
+    contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase());
 
-  removeContact = id => {
-    const removedContact = this.state.contacts.find(
-      contact => contact.id === id
-    );
+  const removeContact = id => {
+    const removedContact = contacts.find(contact => contact.id === id);
 
     if (removedContact) {
-      this.setState(state => ({
-        contacts: state.contacts.filter(contact => contact.id !== id),
-      }));
+      setContacts(contacts.filter(contact => contact.id !== id));
 
       Notiflix.Notify.success(`${removedContact.name} has been removed`);
     }
   };
 
-  handleFilterChange = event => {
-    this.setState({ filter: event.target.value });
+  const handleFilterChange = event => {
+    setFilter(event.target.value);
   };
 
-  render() {
-    const { contacts, filter } = this.state;
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
-    const filteredContacts = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
+  return (
+    <Container>
+      <h1>Phonebook</h1>
+      <ContactForm handleAddNewContact={addNewContact} />
 
-    return (
-      <Container>
-        <h1>Phonebook</h1>
-        <ContactForm handleAddNewContact={this.addNewContact} />
-
-        <Section title="Contacts">
-          <FilterInput value={filter} onChange={this.handleFilterChange} />
-          <ContactList
-            contacts={filteredContacts}
-            handleDelete={this.removeContact}
-          />
-        </Section>
-      </Container>
-    );
-  }
-}
+      <Section title="Contacts">
+        <FilterInput value={filter} onChange={handleFilterChange} />
+        <ContactList contacts={filteredContacts} handleDelete={removeContact} />
+      </Section>
+    </Container>
+  );
+};
