@@ -20,7 +20,7 @@ export const App = () => {
   // mounting phase - aktualizacja danych w state na podstawie danych w local storage
   useEffect(() => {
     const storedContacts = localStorage.getItem(CONTACTS_LOCAL_STORAGE_KEY);
-    if (storedContacts && storedContacts !== 0) {
+    if (storedContacts) {
       setContacts(JSON.parse(storedContacts));
     }
   }, []);
