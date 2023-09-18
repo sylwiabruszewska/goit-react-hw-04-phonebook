@@ -5,6 +5,7 @@ import {
   Section,
   ContactForm,
   ContactList,
+  InputField,
   FilterInput,
 } from './components/index';
 
@@ -84,7 +85,9 @@ export const App = () => {
       <ContactForm handleAddNewContact={addNewContact} />
 
       <Section title="Contacts">
-        <FilterInput value={filter} onChange={handleFilterChange} />
+        <InputField label="Find contacts by name">
+          <FilterInput value={filter} onChange={handleFilterChange} />
+        </InputField>
         <ContactList contacts={filteredContacts} handleDelete={removeContact} />
       </Section>
     </Container>

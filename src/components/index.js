@@ -5,4 +5,5 @@ export * from './ContactList';
 export * from './Container';
 export * from './FilterInput';
 export * from './Input';
+export * from './InputField';
 export * from './Section';
